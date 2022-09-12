@@ -8,7 +8,7 @@ export interface loginResponse {
   data: {
     user: {
       id: string;
-      name: string
+      name: string;
     };
     token: string;
   };
@@ -18,9 +18,9 @@ export interface loginResponse {
   };
 }
 export interface validateTokenResponse {
-  user:{
+  user: {
     id: string;
-    name: string
+    name: string;
   };
   error?: {
     status: number;

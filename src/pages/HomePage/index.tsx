@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { loginResponse } from '../../types/User';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
@@ -10,6 +10,17 @@ export const Home = (): JSX.Element => {
   const auth = useContext(AuthContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getUser = async (): Promise<void> => {
+      const token = localStorage.getItem('authToken');
+      if (token !== null) {
+        await auth.validateToken(token);
+        navigate('/urls');
+      }
+    };
+    getUser();
+  }, [auth]);
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>): void => {
     setEmail(e.target.value);

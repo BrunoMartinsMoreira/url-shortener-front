@@ -13,13 +13,9 @@ export const AuthProvider = ({
 
   useEffect(() => {
     const getToken = async (): Promise<void> => {
-      const storageData = localStorage.getItem('authToken');
-      if (storageData != null) {
-        const data = await api.validateToken(storageData);
-
-        if (data.user != null) {
-          setUser(data.user);
-        }
+      const token = localStorage.getItem('authToken');
+      if (token != null) {
+        await validateToken(token);
       }
     };
     getToken();
@@ -40,13 +36,20 @@ export const AuthProvider = ({
     localStorage.setItem(name, data);
   };
 
+  const validateToken = async (token: string): Promise<void> => {
+    const data = await api.validateToken(token);
+    if (data.user != null) {
+      setUser(data.user);
+    }
+  };
+
   const logout = (): void => {
     setUser(null);
     localStorage.removeItem('authToken');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, validateToken }}>
       {children}
     </AuthContext.Provider>
   );
