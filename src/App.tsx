@@ -1,9 +1,9 @@
+import { AppRoutes } from './Routes/Routes';
 
-function App() {
+export const App = (): JSX.Element => {
   return (
-    <div className='App'>
+    <div className="App">
+      <AppRoutes />
     </div>
   );
-}
-
-export default App;
+};
