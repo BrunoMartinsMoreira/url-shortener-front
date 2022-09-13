@@ -8,11 +8,6 @@ export interface createAccount {
   status: number;
 }
 
-export interface error {
-  status: number;
-  message: string;
-}
-
 export interface loginResponse {
   status: number;
   data: {
@@ -24,6 +19,7 @@ export interface loginResponse {
   };
 }
 export interface validateTokenResponse {
+  status: number;
   user: {
     id: string;
     name: string;

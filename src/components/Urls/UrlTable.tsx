@@ -7,16 +7,15 @@ export const UrlsTable = (): JSX.Element => {
 
   const getUrlItems = useCallback(async (): Promise<void> => {
     const token = localStorage.getItem('authToken');
-    if (token !== null) {
-      const res = await getUserUrls(token);
-      console.log('component', res);
-      setUrls(res);
+    if (token) {
+      const data = await getUserUrls(token);
+      setUrls(data);
     }
   }, []);
 
   useEffect(() => {
     getUrlItems();
-  }, []);
+  }, [urls]); // urls
 
   return (
     <div className="overflow-x-auto relative">

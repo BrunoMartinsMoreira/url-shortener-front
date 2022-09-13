@@ -1,10 +1,5 @@
 import { createContext } from 'react';
-import {
-  createAccount,
-  error,
-  loginResponse,
-  UserLogin,
-} from '../../types/User';
+import { createAccount, loginResponse, UserLogin } from '../../types/User';
 
 export interface AuthContextType {
   user: UserLogin | null;
@@ -12,7 +7,7 @@ export interface AuthContextType {
     name: string,
     email: string,
     password: string,
-  ) => Promise<createAccount | error>;
+  ) => Promise<createAccount>;
   login: (email: string, password: string) => Promise<loginResponse>;
   logout: () => void;
   validateToken: (token: string) => Promise<void>;

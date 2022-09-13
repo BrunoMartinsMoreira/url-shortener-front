@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
-import {
-  createAccount,
-  error,
-  loginResponse,
-  UserLogin,
-} from '../../types/User';
+import { createAccount, loginResponse, UserLogin } from '../../types/User';
 import { AuthContext } from './AuthContext';
 
 export const AuthProvider = ({
@@ -19,7 +14,7 @@ export const AuthProvider = ({
   useEffect(() => {
     const getToken = async (): Promise<void> => {
       const token = localStorage.getItem('authToken');
-      if (token != null) {
+      if (token) {
         await validateToken(token);
       }
     };
@@ -30,7 +25,7 @@ export const AuthProvider = ({
     name: string,
     email: string,
     password: string,
-  ): Promise<createAccount | error> => {
+  ): Promise<createAccount> => {
     const res = await api.createAccount(name, email, password);
     return res;
   };

@@ -2,7 +2,7 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
-import { createAccount, error } from '../../types/User';
+import { createAccount } from '../../types/User';
 import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
 
@@ -45,8 +45,7 @@ export const CreateAccountForm = (): JSX.Element => {
       const res = await auth.createAccount(name, email, password);
       res.status === 201 ? handleSuccess() : handleError(res);
     } catch (error) {
-      alert('Ocorreu um erro inesperado');
-      console.log('erro', error);
+      alert('Verifique os dados informados e tente novamente!');
     }
   };
 
@@ -57,7 +56,7 @@ export const CreateAccountForm = (): JSX.Element => {
     navigate('/');
   };
 
-  const handleError = (res: createAccount | error): void => {
+  const handleError = (res: createAccount): void => {
     setEmail('');
     setName('');
     setPassword('');

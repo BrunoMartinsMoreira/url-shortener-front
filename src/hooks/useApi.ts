@@ -4,7 +4,6 @@ import axios from 'axios';
 import { UrlType } from '../types/Url';
 import {
   createAccount,
-  error,
   loginResponse,
   validateTokenResponse,
 } from '../types/User';
@@ -18,17 +17,16 @@ export const useApi = () => ({
     name: string,
     email: string,
     password: string,
-  ): Promise<createAccount | error> => {
+  ): Promise<createAccount> => {
     try {
       const res = await api.post('/users', { name, email, password });
       return {
         status: res.status,
       };
-    } catch (error: any) {
-      const res = error.response;
+    } catch (error) {
       return {
-        status: res.status,
-        message: res.data.message,
+        status: error.response.status,
+        message: error.response.data.message,
       };
     }
   },
@@ -40,11 +38,10 @@ export const useApi = () => ({
         status: res.status,
         data: res.data,
       };
-    } catch (error: any) {
-      const res = error.response;
+    } catch (error) {
       return {
-        data: res.data.message,
-        status: res.status,
+        data: error.response.data.message,
+        status: error.response.status,
       };
     }
   },
@@ -61,10 +58,11 @@ export const useApi = () => ({
         },
       );
       return {
+        status: response.status,
         user: response.data,
       };
-    } catch (error: any) {
-      return error;
+    } catch (error) {
+      return error.response;
     }
   },
 
@@ -81,7 +79,7 @@ export const useApi = () => ({
       );
 
       return res.data;
-    } catch (error: any) {
+    } catch (error) {
       return error.response;
     }
   },
@@ -94,10 +92,8 @@ export const useApi = () => ({
         },
       });
       return res.data;
-    } catch (error: any) {
-      const res = error.response;
-      console.log(res);
-      return res;
+    } catch (error) {
+      return error.response;
     }
   },
 });

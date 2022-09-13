@@ -12,14 +12,19 @@ export const UrlProvider = ({
   const api = useApi();
 
   const createUrl = async (url: string, token: string): Promise<UrlType> => {
-    const res = await api.createUrl(url, token);
-    return res;
+    try {
+      const res = await api.createUrl(url, token);
+      return res;
+    } catch (error) {
+      return error;
+    }
   };
 
   const getUserUrls = async (token: string): Promise<UrlType[]> => {
-    const res = await api.getUserUrls(token);
-    console.log('context', res);
-    return res;
+    try {
+      const res = await api.getUserUrls(token);
+      return res;
+    } catch (error) {}
   };
 
   return (

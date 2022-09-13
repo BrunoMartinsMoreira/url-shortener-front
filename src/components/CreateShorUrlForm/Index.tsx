@@ -8,7 +8,7 @@ import { UrlInput } from '../Urls/UrlInput';
 export const CreateShortUrlForm = (): JSX.Element => {
   const [originalUrl, setOriginalUrl] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { createUrl, setUrls, urls } = useContext(UrlContext);
+  const { createUrl, setUrls } = useContext(UrlContext);
 
   const handleUrl = (e: ChangeEvent<HTMLInputElement>): void => {
     const errorMessage: string = !validateUrl(e.target.value)
@@ -22,18 +22,19 @@ export const CreateShortUrlForm = (): JSX.Element => {
   const handleSubmit = async (e: React.MouseEvent): Promise<void> => {
     e.preventDefault();
     const token = localStorage.getItem('authToken');
-    if (token != null) {
+    if (token) {
       const res = await createUrl(originalUrl, token);
 
       if (res.status === 400) {
-        console.log('component error', res);
         setOriginalUrl('');
-        alert(res.message);
+        alert(
+          'Erro ao cadastrar a url, verifique se digitou corretamente ou se já não possui a mesma url cadastrada!',
+        );
+        return;
       }
 
       setOriginalUrl('');
       setUrls((prevState) => [...prevState, res]);
-      console.log('component success', urls);
     }
   };
 
