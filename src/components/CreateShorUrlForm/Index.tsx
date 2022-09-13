@@ -2,12 +2,15 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { UrlContext } from '../../contexts/Urls/UrlsContext';
 import { validateUrl } from '../../helpers/validateUrl';
+import { ModalError } from '../shared/ModalError/Index';
 import { UrlButton } from '../Urls/UrlBtn';
 import { UrlInput } from '../Urls/UrlInput';
 
 export const CreateShortUrlForm = (): JSX.Element => {
   const [originalUrl, setOriginalUrl] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [modalErrorMessage, setModalErrorMessage] = useState<string>('');
+
   const { createUrl, setUrls } = useContext(UrlContext);
 
   const handleUrl = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -19,6 +22,10 @@ export const CreateShortUrlForm = (): JSX.Element => {
     setOriginalUrl(e.target.value);
   };
 
+  const showModal = (): void => {
+    setModalErrorMessage('');
+  };
+
   const handleSubmit = async (e: React.MouseEvent): Promise<void> => {
     e.preventDefault();
     const token = localStorage.getItem('authToken');
@@ -27,9 +34,10 @@ export const CreateShortUrlForm = (): JSX.Element => {
 
       if (res.status === 400) {
         setOriginalUrl('');
-        alert(
+        setModalErrorMessage(
           'Erro ao cadastrar a url, verifique se digitou corretamente ou se já não possui a mesma url cadastrada!',
         );
+
         return;
       }
 
@@ -42,6 +50,9 @@ export const CreateShortUrlForm = (): JSX.Element => {
 
   return (
     <>
+      {modalErrorMessage && (
+        <ModalError errorMessage={modalErrorMessage} setShowModal={showModal} />
+      )}
       <div className="flex justify-center py-3 px-6 bg-gray-50 border-b space-x-6 m-auto w-[100vw]">
         <div className="mb-5 flex flex-wrap justify-center input-group relative items-end w-[70vw]">
           <UrlInput

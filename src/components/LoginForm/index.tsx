@@ -5,10 +5,12 @@ import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { loginResponse } from '../../types/User';
 import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
+import { ModalError } from '../shared/ModalError/Index';
 
 export const LoginForm = (): JSX.Element => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [modalErrorMessage, setModalErrorMessage] = useState<string>('');
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -32,7 +34,11 @@ export const LoginForm = (): JSX.Element => {
   const loginError = (): void => {
     setEmail('');
     setPassword('');
-    alert('Email ou senha incorretos');
+    setModalErrorMessage('Email ou senha incorretos');
+  };
+
+  const showModal = (): void => {
+    setModalErrorMessage('');
   };
 
   const disabledBtn = email.length === 0 || password.length === 0;
@@ -55,26 +61,31 @@ export const LoginForm = (): JSX.Element => {
   };
 
   return (
-    <form>
-      <div className="grid gap-6 mb-6 md:grid-cols-1">
-        <Input
-          type="email"
-          value={email}
-          placeholder="email@example.com"
-          id="email"
-          labelText="Email:"
-          onChange={handleEmail}
-        />
-        <Input
-          type="password"
-          value={password}
-          placeholder=""
-          id="password"
-          labelText="Senha:"
-          onChange={handlePassword}
-        />
-        <Button text="Login" onclick={handleLogin} isDisabled={disabledBtn} />
-      </div>
-    </form>
+    <>
+      {modalErrorMessage && (
+        <ModalError errorMessage={modalErrorMessage} setShowModal={showModal} />
+      )}
+      <form>
+        <div className="grid gap-6 mb-6 md:grid-cols-1">
+          <Input
+            type="email"
+            value={email}
+            placeholder="email@example.com"
+            id="email"
+            labelText="Email:"
+            onChange={handleEmail}
+          />
+          <Input
+            type="password"
+            value={password}
+            placeholder=""
+            id="password"
+            labelText="Senha:"
+            onChange={handlePassword}
+          />
+          <Button text="Login" onclick={handleLogin} isDisabled={disabledBtn} />
+        </div>
+      </form>
+    </>
   );
 };

@@ -2,15 +2,16 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
-import { createAccount } from '../../types/User';
 import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
+import { ModalError } from '../shared/ModalError/Index';
 
 export const CreateAccountForm = (): JSX.Element => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [modalErrorMessage, setModalErrorMessage] = useState<string>('');
 
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -43,10 +44,14 @@ export const CreateAccountForm = (): JSX.Element => {
     e.preventDefault();
     try {
       const res = await auth.createAccount(name, email, password);
-      res.status === 201 ? handleSuccess() : handleError(res);
+      res.status === 201 ? handleSuccess() : handleError();
     } catch (error) {
-      alert('Verifique os dados informados e tente novamente!');
+      setModalErrorMessage('Verifique os dados informados e tente novamente!');
     }
+  };
+
+  const showModal = (): void => {
+    setModalErrorMessage('');
   };
 
   const handleSuccess = (): void => {
@@ -56,49 +61,54 @@ export const CreateAccountForm = (): JSX.Element => {
     navigate('/');
   };
 
-  const handleError = (res: createAccount): void => {
+  const handleError = (): void => {
     setEmail('');
     setName('');
     setPassword('');
-    alert(res.message);
+    setModalErrorMessage('Verifique os dados informados e tente novamente!');
   };
 
   return (
-    <form>
-      <div className="grid gap-6 mb-6 md:grid-cols-1">
-        <Input
-          type="text"
-          value={name}
-          placeholder="John Doe"
-          id="email"
-          labelText="Seu nome:"
-          onChange={handleName}
-        />
-        <Input
-          type="email"
-          value={email}
-          placeholder="email@example.com"
-          id="email"
-          labelText="Email:"
-          onChange={handleEmail}
-        />
-        {error.length > 0 && (
-          <span className="text-xs text-red-600">{error}</span>
-        )}
-        <Input
-          type="password"
-          value={password}
-          placeholder=""
-          id="password"
-          labelText="Senha:"
-          onChange={handlePassword}
-        />
-        <Button
-          text="Cadastrar"
-          onclick={handleSubmit}
-          isDisabled={disabledBtn}
-        />
-      </div>
-    </form>
+    <>
+      {modalErrorMessage && (
+        <ModalError errorMessage={modalErrorMessage} setShowModal={showModal} />
+      )}
+      <form>
+        <div className="grid gap-6 mb-6 md:grid-cols-1">
+          <Input
+            type="text"
+            value={name}
+            placeholder="John Doe"
+            id="email"
+            labelText="Seu nome:"
+            onChange={handleName}
+          />
+          <Input
+            type="email"
+            value={email}
+            placeholder="email@example.com"
+            id="email"
+            labelText="Email:"
+            onChange={handleEmail}
+          />
+          {error.length > 0 && (
+            <span className="text-xs text-red-600">{error}</span>
+          )}
+          <Input
+            type="password"
+            value={password}
+            placeholder=""
+            id="password"
+            labelText="Senha:"
+            onChange={handlePassword}
+          />
+          <Button
+            text="Cadastrar"
+            onclick={handleSubmit}
+            isDisabled={disabledBtn}
+          />
+        </div>
+      </form>
+    </>
   );
 };
