@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
-import { ModalError } from '../shared/ModalError/Index';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const CreateAccountForm = (): JSX.Element => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [modalErrorMessage, setModalErrorMessage] = useState<string>('');
 
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -46,18 +46,15 @@ export const CreateAccountForm = (): JSX.Element => {
       const res = await auth.createAccount(name, email, password);
       res.status === 201 ? handleSuccess() : handleError();
     } catch (error) {
-      setModalErrorMessage('Verifique os dados informados e tente novamente!');
+      toast.error('Verifique os dados informados e tente novamente!');
     }
-  };
-
-  const showModal = (): void => {
-    setModalErrorMessage('');
   };
 
   const handleSuccess = (): void => {
     setEmail('');
     setName('');
     setPassword('');
+    toast.success('Cadastro realizado com sucesso!');
     navigate('/');
   };
 
@@ -65,14 +62,12 @@ export const CreateAccountForm = (): JSX.Element => {
     setEmail('');
     setName('');
     setPassword('');
-    setModalErrorMessage('Verifique os dados informados e tente novamente!');
+    toast.error('Verifique os dados informados e tente novamente!');
   };
 
   return (
     <>
-      {modalErrorMessage && (
-        <ModalError errorMessage={modalErrorMessage} setShowModal={showModal} />
-      )}
+      <ToastContainer />
       <form>
         <div className="grid gap-6 mb-6 md:grid-cols-1">
           <Input

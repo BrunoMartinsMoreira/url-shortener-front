@@ -5,12 +5,12 @@ import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { loginResponse } from '../../types/User';
 import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
-import { ModalError } from '../shared/ModalError/Index';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const LoginForm = (): JSX.Element => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [modalErrorMessage, setModalErrorMessage] = useState<string>('');
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -34,11 +34,7 @@ export const LoginForm = (): JSX.Element => {
   const loginError = (): void => {
     setEmail('');
     setPassword('');
-    setModalErrorMessage('Email ou senha incorretos');
-  };
-
-  const showModal = (): void => {
-    setModalErrorMessage('');
+    toast.error('Email ou senha incorretos');
   };
 
   const disabledBtn = email.length === 0 || password.length === 0;
@@ -62,9 +58,7 @@ export const LoginForm = (): JSX.Element => {
 
   return (
     <>
-      {modalErrorMessage && (
-        <ModalError errorMessage={modalErrorMessage} setShowModal={showModal} />
-      )}
+      <ToastContainer />
       <form>
         <div className="grid gap-6 mb-6 md:grid-cols-1">
           <Input
