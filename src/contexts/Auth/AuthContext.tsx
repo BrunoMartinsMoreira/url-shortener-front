@@ -1,9 +1,18 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createContext } from 'react';
-import { loginResponse, UserLogin } from '../../types/User';
+import {
+  createAccount,
+  error,
+  loginResponse,
+  UserLogin,
+} from '../../types/User';
 
 export interface AuthContextType {
   user: UserLogin | null;
+  createAccount: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<createAccount | error>;
   login: (email: string, password: string) => Promise<loginResponse>;
   logout: () => void;
   validateToken: (token: string) => Promise<void>;

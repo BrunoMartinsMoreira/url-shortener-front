@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react';
 
 interface inputProps {
-  type: string;
   value: string;
   placeholder: string;
   id: string;
@@ -9,8 +8,7 @@ interface inputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const Input = ({
-  type,
+export const UrlInput = ({
   value,
   placeholder,
   id,
@@ -26,12 +24,12 @@ export const Input = ({
         {labelText}
       </label>
       <input
+        type="text"
         id={id}
-        type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-600 block w-full max-w-4xl p-2.5 mr-3"
+        className={`w-[40vw] bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-600 block p-2.5 pr-3 py-2`}
       />
     </div>
   );

@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
-import { loginResponse, UserLogin } from '../../types/User';
+import {
+  createAccount,
+  error,
+  loginResponse,
+  UserLogin,
+} from '../../types/User';
 import { AuthContext } from './AuthContext';
 
 export const AuthProvider = ({
@@ -20,6 +25,15 @@ export const AuthProvider = ({
     };
     getToken();
   }, []);
+
+  const createAccount = async (
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<createAccount | error> => {
+    const res = await api.createAccount(name, email, password);
+    return res;
+  };
 
   const login = async (
     email: string,
@@ -49,7 +63,9 @@ export const AuthProvider = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, validateToken }}>
+    <AuthContext.Provider
+      value={{ user, createAccount, login, logout, validateToken }}
+    >
       {children}
     </AuthContext.Provider>
   );

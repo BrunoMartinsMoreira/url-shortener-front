@@ -3,6 +3,16 @@ export interface UserLogin {
   name: string;
 }
 
+export interface createAccount {
+  message?: string;
+  status: number;
+}
+
+export interface error {
+  status: number;
+  message: string;
+}
+
 export interface loginResponse {
   status: number;
   data: {
@@ -12,18 +22,10 @@ export interface loginResponse {
     };
     token: string;
   };
-  error?: {
-    status: number;
-    message: string;
-  };
 }
 export interface validateTokenResponse {
   user: {
     id: string;
     name: string;
-  };
-  error?: {
-    status: number;
-    message?: string;
   };
 }
